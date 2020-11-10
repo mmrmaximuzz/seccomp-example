@@ -55,19 +55,23 @@ typedef int (*untrusted_f)(const struct untrusted *);
 static inline int run_untrusted(const struct untrusted *resources,
 				untrusted_f executor)
 {
+	/* Additionally close the std{in,out,err} streams */
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+
 	/*
 	 * Use direct syscall here because there may be no wrapper in libc
 	 */
 	long err = syscall(SYS_seccomp, SECCOMP_SET_MODE_STRICT, 0, NULL);
 	if (err == -1) {
-		perror("cannot enter strict seccomp mode");
+		/*
+		 * We cannot print the error because the standard streams are
+		 * already closed so jusst return an error and hope for the
+		 * best.
+		 */
 		return err;
 	}
-
-	/* Additionally close the std{in,out,err} streams */
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
 
 	/* Now we are prepared to run the untrusted code */
 	return executor(resources);
