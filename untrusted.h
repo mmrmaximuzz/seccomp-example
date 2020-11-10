@@ -16,6 +16,9 @@
  * attacks.
  */
 
+#ifndef UNTRUSTED_H
+#define UNTRUSTED_H
+
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -122,3 +125,5 @@ fail_sock:
 fail:
 	return -1;
 }
+
+#endif
