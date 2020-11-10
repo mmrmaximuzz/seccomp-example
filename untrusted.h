@@ -26,6 +26,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 
+#include <linux/seccomp.h>
+#include <sys/syscall.h>
+
 /**
  * struct untrusted - the structure to use for untrusted part of the execution
  *
@@ -40,6 +43,27 @@ struct untrusted {
 	size_t memsize;
 };
 typedef int (*untrusted_f)(const struct untrusted *);
+
+static inline int run_untrusted(const struct untrusted *resources,
+				untrusted_f executor)
+{
+	/*
+	 * Use direct syscall here because there may be no wrapper in libc
+	 */
+	long err = syscall(SYS_seccomp, SECCOMP_SET_MODE_STRICT, 0, NULL);
+	if (err == -1) {
+		perror("cannot enter strict seccomp mode");
+		return err;
+	}
+
+	/* Additionally close the std{in,out,err} streams */
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+
+	/* Now we are prepared to run the untrusted code */
+	return executor(resources);
+}
 
 /**
  * Simple helper which is used to create a named unix streamsocket listening for
