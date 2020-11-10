@@ -44,6 +44,16 @@ struct untrusted {
 };
 typedef int (*untrusted_f)(const struct untrusted *);
 
+/**
+ * run_untrusted - prepare the sandbox and run untrusted code
+ *
+ * The sandbox is prepared with linux's `seccomp` called with strict mode of
+ * operation. Also the standard streams are closed here to limit the IO of
+ * untrusted process to the single file descriptor.
+ *
+ * @resources: the resoures struct used as input for the untrusted code
+ * @executor: the untrusted function being called
+ */
 static inline int run_untrusted(const struct untrusted *resources,
 				untrusted_f executor)
 {
