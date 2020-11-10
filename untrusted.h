@@ -1,13 +1,11 @@
 /**
- * Simple seccomp example for linux. In this example the unix socket is created,
- * then it accepts connection and runs the untrusted code in the sandbox. The
- * sandboxing consists of limiting the number of system calls available for the
- * untrusted code to the following small subset:
+ * untrusted.h - the simple and stupid example of using `seccomp`
  *
- * - read
- * - write
- * - _exit
- * - sigreturn
+ * Provides the simple wrappers for calling untrusted code in a pseudo-sandbox.
+ * The sandboxing consists of limiting the number of system calls available for
+ * the untrusted code to the following small subset:
+ *
+ * read, write, _exit, sigreturn
  *
  * Linux-specific `seccomp` system call is used to achieve that behavior. See
  * the corresponding man page for the description.
@@ -77,7 +75,11 @@ static inline int run_untrusted(const struct untrusted *resources,
 
 /**
  * Simple helper which is used to create a named unix streamsocket listening for
- * exactly one connection at a time and bind it to @path in the filesystem.
+ * exactly one connection at a time and bind it to @path in the filesystem. The
+ * socket is used as interconnection between the untrusted code and the rest of
+ * the system and the rest of the system.
+ *
+ * @path: path in the filesystem to place the unix socket
  *
  * Returns socket fd on success and -1 on failures.
  */
