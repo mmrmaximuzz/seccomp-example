@@ -16,6 +16,7 @@
 
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 
 #include "untrusted.h"
 
@@ -114,11 +115,22 @@ int main(void)
 		return EXIT_FAILURE;
 	}
 
-	/* Prepare the resource structure and run the untrusted code */
+	/* Prepare the resource structure for the untrusted code */
 	struct untrusted resources = {
 		.fd      = dsock,
 		.memory  = NULL,
 		.memsize = 0,
 	};
-	return run_untrusted(&resources, untrusted_ascii_stripper);
+
+	/* Run the untrusted code */
+	int res = run_untrusted(&resources, untrusted_ascii_stripper);
+
+	/*
+	 * Note that after function return the current process may be already
+	 * sandboxed so print nothing, and exit with `_exit` system call. Note
+	 * that we cannot just return from main (because it calls `exit_group`
+	 * which is forbidden) and we cannot call libc's `_exit` because it is
+	 * just a wrapper for `exit_group`.
+	 */
+	syscall(SYS_exit, res);
 }
