@@ -1,8 +1,18 @@
-/*
+/**
  * Simple seccomp example for linux. In this example the unix socket is created,
- * then it accepts connection and runs the unreliable code in the sandbox.
+ * then it accepts connection and runs the unreliable code in the sandbox. The
+ * sandboxing consists of limiting the number of system calls available for the
+ * unreliable code to the following small subset:
  *
- * Do not use this example as a real sandbox because it is _just_ an example.
+ * - read
+ * - write
+ * - _exit
+ * - sigreturn
+ *
+ * Linux-specific `seccomp` system call is used to achieve that behavior. See
+ * the corresponding man page for the description.
+ *
+ * NOTE: Do not use this example as a real sandbox because it is an _example_.
  * For the real sandboxes limiting the set of available system calls is not
  * enough - they should also protect the system against the side-channel
  * attacks.
