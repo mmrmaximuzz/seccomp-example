@@ -8,6 +8,7 @@
  * attacks.
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -15,7 +16,21 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-/*
+/**
+ * struct unreliable - the structure to use for unreliable part of the execution
+ *
+ * This structure is used as an input argument for all the unreliable code
+ * @fd - connected socket file descriptor for data exchange
+ * @memory - the pointer to the memory pre-allocated for the unreliable process
+ * @memsize - the amount of memory available (bytes)
+ */
+struct unreliable {
+	int    fd;
+	void   *memory;
+	size_t memsize;
+};
+
+/**
  * Simple helper which is used to create a named unix streamsocket listening for
  * exactly one connection at a time and bind it to @path in the filesystem.
  *
