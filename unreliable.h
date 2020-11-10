@@ -1,6 +1,6 @@
 /*
  * Simple seccomp example for linux. In this example the unix socket is created,
- * then it accepts connection and goes into the sandbox mode.
+ * then it accepts connection and runs the unreliable code in the sandbox.
  *
  * Do not use this example as a real sandbox because it is _just_ an example.
  * For the real sandboxes limiting the set of available system calls is not
