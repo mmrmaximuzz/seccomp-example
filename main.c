@@ -8,6 +8,7 @@
  * attacks.
  */
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +20,32 @@
 #include "untrusted.h"
 
 #define UNIX_SOCKET_PATHNAME "test"
+
+/**
+ * untrusted_ascii_stripper - the example of untrusted code
+ *
+ * Just reads and removes all non-printable ascii characters and writes the
+ * purified stream back.
+ */
+static int untrusted_ascii_stripper(const struct untrusted *resources)
+{
+	int fd = resources->fd;
+	unsigned char byte = 0;
+
+	while (true) {
+		ssize_t rres = read(fd, &byte, sizeof(byte));
+		if (rres <= 0)
+			return rres;
+
+		/* Filter all non-printable characteres */
+		if (!isprint(byte))
+			continue;
+
+		ssize_t wres = write(fd, &byte, sizeof(byte));
+		if (wres == -1)
+			return wres;
+	}
+}
 
 /**
  * Simple helper which is used to create a named unix streamsocket listening for
@@ -87,11 +114,11 @@ int main(void)
 		return EXIT_FAILURE;
 	}
 
-	char buffer[1] = {0};
-	while (true) {
-		read(dsock, buffer, sizeof(buffer));
-		write(dsock, buffer, sizeof(buffer));
-	}
-
-	return EXIT_SUCCESS;
+	/* Prepare the resource structure and run the untrusted code */
+	struct untrusted resources = {
+		.fd      = dsock,
+		.memory  = NULL,
+		.memsize = 0,
+	};
+	return run_untrusted(&resources, untrusted_ascii_stripper);
 }
