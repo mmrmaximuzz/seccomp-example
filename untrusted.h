@@ -33,9 +33,9 @@
  * struct untrusted - the structure to use for untrusted part of the execution
  *
  * This structure is used as an input argument for all the untrusted code
- * @fd - connected socket file descriptor for data exchange
- * @memory - the pointer to the memory pre-allocated for the untrusted process
- * @memsize - the amount of memory available (bytes)
+ * @fd: connected socket file descriptor for data exchange
+ * @memory: the pointer to the memory pre-allocated for the untrusted process
+ * @memsize: the amount of memory available (bytes)
  */
 struct untrusted {
 	int    fd;
