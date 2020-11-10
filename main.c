@@ -1,3 +1,13 @@
+/**
+ * Simple `seccomp` example. In this example the unix socket is created, then it
+ * accepts connection and runs the untrusted code in the sandbox.
+ *
+ * NOTE: Do not use this example as a real sandbox because it is an _example_.
+ * For the real sandboxes limiting the set of available system calls is not
+ * enough - they should also protect the system against the side-channel
+ * attacks.
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
