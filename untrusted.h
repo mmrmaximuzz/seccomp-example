@@ -105,7 +105,9 @@ static inline int create_unix_socket(const char *path)
 		goto fail;
 	}
 
+	/* unlink the previous file object under the path if exists */
 	unlink(path);
+
 	err = bind(sock, (struct sockaddr *) &name, sizeof(name));
 	if (err == -1) {
 		perror("cannot bind socket");
