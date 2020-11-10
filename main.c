@@ -1,3 +1,7 @@
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "untrusted.h"
 
 #define UNIX_SOCKET_PATHNAME "test"
@@ -10,7 +14,7 @@ int main(void)
 	int dsock = accept(sock, NULL, NULL);
 	if (dsock == -1) {
 		perror("cannot accept connection");
-		exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	char buffer[1] = {0};
