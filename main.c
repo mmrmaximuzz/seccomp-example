@@ -126,11 +126,11 @@ int main(void)
 	int res = run_untrusted(&resources, untrusted_ascii_stripper);
 
 	/*
-	 * Note that after function return the current process may be already
-	 * sandboxed so print nothing, and exit with `_exit` system call. Note
-	 * that we cannot just return from main (because it calls `exit_group`
-	 * which is forbidden) and we cannot call libc's `_exit` because it is
-	 * just a wrapper for `exit_group`.
+	 * After function return the current process may be already sandboxed so
+	 * print nothing, and exit with `_exit` system call. Note that we cannot
+	 * just return from main (because it calls `exit_group` which is
+	 * forbidden) and we cannot call libc's `_exit` because it is just a
+	 * wrapper for `exit_group`.
 	 */
 	syscall(SYS_exit, res);
 }
