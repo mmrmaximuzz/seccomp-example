@@ -1,8 +1,8 @@
 /**
  * Simple seccomp example for linux. In this example the unix socket is created,
- * then it accepts connection and runs the unreliable code in the sandbox. The
+ * then it accepts connection and runs the untrusted code in the sandbox. The
  * sandboxing consists of limiting the number of system calls available for the
- * unreliable code to the following small subset:
+ * untrusted code to the following small subset:
  *
  * - read
  * - write
@@ -27,14 +27,14 @@
 #include <unistd.h>
 
 /**
- * struct unreliable - the structure to use for unreliable part of the execution
+ * struct untrusted - the structure to use for untrusted part of the execution
  *
- * This structure is used as an input argument for all the unreliable code
+ * This structure is used as an input argument for all the untrusted code
  * @fd - connected socket file descriptor for data exchange
- * @memory - the pointer to the memory pre-allocated for the unreliable process
+ * @memory - the pointer to the memory pre-allocated for the untrusted process
  * @memsize - the amount of memory available (bytes)
  */
-struct unreliable {
+struct untrusted {
 	int    fd;
 	void   *memory;
 	size_t memsize;
