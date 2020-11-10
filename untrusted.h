@@ -39,6 +39,7 @@ struct untrusted {
 	void   *memory;
 	size_t memsize;
 };
+typedef int (*untrusted_f)(const struct untrusted *);
 
 /**
  * Simple helper which is used to create a named unix streamsocket listening for
