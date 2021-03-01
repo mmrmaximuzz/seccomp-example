@@ -1,7 +1,7 @@
 /**
  * untrusted.h - the simple and stupid example of using `seccomp`
  *
- * Provides the simple wrappers for calling untrusted code in a pseudo-sandbox.
+ * Provides the simple wrapper for calling untrusted code in a pseudo-sandbox.
  * The sandboxing consists of limiting the number of system calls available for
  * the untrusted code to the following small subset:
  *
@@ -67,7 +67,7 @@ static inline int run_untrusted(const struct untrusted *resources,
 	if (err == -1) {
 		/*
 		 * We cannot print the error because the standard streams are
-		 * already closed so jusst return an error and hope for the
+		 * already closed so just return an error and hope for the
 		 * best.
 		 */
 		return err;

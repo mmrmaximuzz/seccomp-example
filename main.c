@@ -52,11 +52,11 @@ static int untrusted_ascii_stripper(const struct untrusted *resources)
  * Simple helper which is used to create a named unix streamsocket listening for
  * exactly one connection at a time and bind it to @path in the filesystem. The
  * socket is used as interconnection between the untrusted code and the rest of
- * the system and the rest of the system.
+ * the system.
  *
  * @path: path in the filesystem to place the unix socket
  *
- * Returns socket fd on success and -1 on failures.
+ * Returns socket fd on success and -1 on failure.
  */
 static int create_unix_socket(const char *path)
 {
