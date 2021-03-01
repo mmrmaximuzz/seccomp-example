@@ -107,6 +107,8 @@ int main(void)
 	 * the system.
 	 */
 	int sock = create_unix_socket(UNIX_SOCKET_PATHNAME);
+	if (sock == -1)
+		return EXIT_FAILURE;
 
 	/* Wait for incoming connection. */
 	int dsock = accept(sock, NULL, NULL);
